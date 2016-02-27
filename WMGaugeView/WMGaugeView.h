@@ -52,6 +52,7 @@ WMGaugeViewSubdivisionsAlignment;
 @property (nonatomic, readwrite, assign) float value;
 @property (nonatomic, readwrite, assign) float minValue;
 @property (nonatomic, readwrite, assign) float maxValue;
+@property (nonatomic, readwrite, strong) NSString * valueFormat;
 @property (nonatomic, readwrite, assign) bool showRangeLabels;
 @property (nonatomic, readwrite, assign) CGFloat rangeLabelsWidth;
 @property (nonatomic, readwrite, strong) UIFont *rangeLabelsFont;

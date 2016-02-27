@@ -84,6 +84,7 @@
     _value = 0.0;
     _minValue = 0.0;
     _maxValue = 240.0;
+    _valueFormat = @"%0.0f";
 
     background = nil;
     
@@ -279,7 +280,7 @@
             CGContextStrokePath(context);
             
             // Draw label
-            NSString *valueString = [NSString stringWithFormat:@"%0.0f",value];
+            NSString *valueString = [NSString stringWithFormat:_valueFormat,value];
             UIFont* font = _scaleFont ? _scaleFont : [UIFont fontWithName:@"Helvetica-Bold" size:0.05];
             NSDictionary* stringAttrs = @{ NSFontAttributeName : font, NSForegroundColorAttributeName : color };
             NSAttributedString* attrStr = [[NSAttributedString alloc] initWithString:valueString attributes:stringAttrs];
