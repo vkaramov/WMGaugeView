@@ -39,7 +39,7 @@
     _gaugeView.rangeLabelsFont = [UIFont fontWithName:@"Helvetica" size:0.04];
     _gaugeView.value = 60;
     
-    _gaugeView2.style = [WMGaugeViewStyleFlatThin new];
+    _gaugeView2.style = [WMGaugeViewStyleThermostat new];
     _gaugeView2.minValue = 50;
     _gaugeView2.maxValue = 90.0;
     _gaugeView2.showInnerRim = YES;
@@ -47,10 +47,10 @@
     _gaugeView2.showRangeLabels = YES;
     _gaugeView2.rangeLabelsWidth = 0.049;
     _gaugeView2.scalePosition = -0.07;
-    _gaugeView2.scaleLabelsPosition = -0.11;
+//    _gaugeView2.scaleLabelsPosition = -0.11;
     _gaugeView2.scaleDivisionColor = RGB(235, 235, 235);
     _gaugeView2.rangeLabelsFontColor = RGB(109, 95, 95);
-    _gaugeView2.useRangeColorForDivisions = NO;
+//    _gaugeView2.useRangeColorForDivisions = NO;
     _gaugeView2.scaleDivisions = 4;
     _gaugeView2.scaleSubdivisions = 5;
     _gaugeView2.scaleStartAngle = 30;
@@ -63,13 +63,13 @@
     _gaugeView2.scaleDivisionsWidth = 0.007;
     _gaugeView2.scaleDivisionsLength = 0.03;
     _gaugeView2.value = 60;
-    _gaugeView2.valueFormat = @"%0.0fº";
+//    _gaugeView2.valueFormat = @"%0.0fº";
     UIColor * customTextColor = RGB(109, 95, 95);
     UIFont * customTextFont = [UIFont fontWithName:@"Helvetica" size:0.2];
-    NSDictionary* stringAttrs = @{ NSFontAttributeName : customTextFont, NSForegroundColorAttributeName : customTextColor };
-    NSAttributedString* customText = [[NSAttributedString alloc] initWithString:@"64" attributes:stringAttrs];
-    _gaugeView2.customTextVerticalOffset = 0.35;
-    _gaugeView2.customText = customText;
+//    NSDictionary* stringAttrs = @{ NSFontAttributeName : customTextFont, NSForegroundColorAttributeName : customTextColor };
+//    NSAttributedString* customText = [[NSAttributedString alloc] initWithString:@"64" attributes:stringAttrs];
+//    _gaugeView2.customTextVerticalOffset = 0.35;
+//    _gaugeView2.customText = customText;
     _gaugeView2.unitOfMeasurementVerticalOffset = 0.35;
     _gaugeView2.showUnitOfMeasurement = YES;
     _gaugeView2.unitOfMeasurement = @"º";

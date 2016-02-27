@@ -25,6 +25,7 @@
 		BEE4443E189846A9002B489A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE44420189846A9002B489A /* UIKit.framework */; };
 		BEE44446189846A9002B489A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BEE44444189846A9002B489A /* InfoPlist.strings */; };
 		BEE44448189846A9002B489A /* WMGaugeViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE44447189846A9002B489A /* WMGaugeViewTests.m */; };
+		EFFADF111C81B7BE00A2E4F2 /* WMGaugeViewStyleThermostat.m in Sources */ = {isa = PBXBuildFile; fileRef = EFFADF101C81B7BE00A2E4F2 /* WMGaugeViewStyleThermostat.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		BEE44443189846A9002B489A /* WMGaugeViewTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WMGaugeViewTests-Info.plist"; sourceTree = "<group>"; };
 		BEE44445189846A9002B489A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BEE44447189846A9002B489A /* WMGaugeViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMGaugeViewTests.m; sourceTree = "<group>"; };
+		EFFADF0F1C81B7BE00A2E4F2 /* WMGaugeViewStyleThermostat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMGaugeViewStyleThermostat.h; sourceTree = "<group>"; };
+		EFFADF101C81B7BE00A2E4F2 /* WMGaugeViewStyleThermostat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMGaugeViewStyleThermostat.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,8 @@
 				3E788DD51BDCEAC500F78D6A /* WMGaugeViewStyleFlatThin.m */,
 				3E788DDD1BDCF58300F78D6A /* WMGaugeViewStyle3D.h */,
 				3E788DDE1BDCF58300F78D6A /* WMGaugeViewStyle3D.m */,
+				EFFADF0F1C81B7BE00A2E4F2 /* WMGaugeViewStyleThermostat.h */,
+				EFFADF101C81B7BE00A2E4F2 /* WMGaugeViewStyleThermostat.m */,
 			);
 			name = WMGaugeView;
 			path = ../../WMGaugeView;
@@ -283,6 +288,7 @@
 				BEE44433189846A9002B489A /* ViewController.m in Sources */,
 				BEE4442D189846A9002B489A /* AppDelegate.m in Sources */,
 				3E788DDF1BDCF58300F78D6A /* WMGaugeViewStyle3D.m in Sources */,
+				EFFADF111C81B7BE00A2E4F2 /* WMGaugeViewStyleThermostat.m in Sources */,
 				BEE44429189846A9002B489A /* main.m in Sources */,
 				3E788DD61BDCEAC500F78D6A /* WMGaugeViewStyleFlatThin.m in Sources */,
 			);
