@@ -74,12 +74,18 @@
     _scaleDivisions = 12.0;
     _scaleSubdivisions = 10.0;
     _showScale = YES;
+    _showUnitsOnScale = NO;
     _showScaleShadow = YES;
     _scalesubdivisionsAligment = WMGaugeViewSubdivisionsAlignmentTop;
     _scaleDivisionsLength = 0.045;
     _scaleDivisionsWidth = 0.01;
     _scaleSubdivisionsLength = 0.015;
     _scaleSubdivisionsWidth = 0.01;
+    _scaleLabelsPosition = 0.05;
+    _horizontalScaleLabels = NO;
+    _useRangeColorForDivisions = YES;
+    _useRangeColorForScaleLabels = YES;
+    _scaleLabelColor = [UIColor whiteColor];
     
     _value = 0.0;
     _minValue = 0.0;
@@ -107,6 +113,9 @@
     _unitOfMeasurementFont = [UIFont fontWithName:@"Helvetica" size:0.04];
     _unitOfMeasurement = @"";
     _showUnitOfMeasurement = NO;
+    
+    _customTextVerticalOffset = 0.6;
+    _customText2VerticalOffset = 0.6;
     
     animationCompletion = nil;
 
@@ -231,15 +240,28 @@
  */
 - (void)drawText:(CGContextRef)context
 {
-    CGContextSetShadow(context, CGSizeMake(0.05, 0.05), 2.0);
+    CGContextSetShadow(context, CGSizeMake(0.00, 0.00), 0.0);
     UIFont* font = _unitOfMeasurementFont ? _unitOfMeasurementFont : [UIFont fontWithName:@"Helvetica" size:0.04];
     UIColor* color = _unitOfMeasurementColor ? _unitOfMeasurementColor : [UIColor whiteColor];
     NSDictionary* stringAttrs = @{ NSFontAttributeName : font, NSForegroundColorAttributeName : color };
     NSAttributedString* attrStr = [[NSAttributedString alloc] initWithString:_unitOfMeasurement attributes:stringAttrs];
-    CGSize fontWidth;
-    fontWidth = [_unitOfMeasurement sizeWithAttributes:stringAttrs];
+    CGSize fontWidth = [_unitOfMeasurement sizeWithAttributes:stringAttrs];
 
-    [attrStr drawAtPoint:CGPointMake(0.5 - fontWidth.width / 2.0, _unitOfMeasurementVerticalOffset)];
+    if (_customText.length)
+    {
+        const CGFloat x = 0.5 - _customText.size.width / 2.0;
+        [_customText drawAtPoint:CGPointMake(x, _customTextVerticalOffset)];
+        [attrStr drawAtPoint:CGPointMake(x + _customText.size.width, _unitOfMeasurementVerticalOffset)];
+    }
+    else
+    {
+        [attrStr drawAtPoint:CGPointMake(0.5 - fontWidth.width / 2.0, _unitOfMeasurementVerticalOffset)];
+    }
+    
+    if (_customText2.length)
+    {
+        [_customText2 drawAtPoint:CGPointMake(0.5 - fontWidth.width / 2.0, _customText2VerticalOffset)];
+    }
 }
 
 /**
@@ -269,7 +291,8 @@
         if ((fabsf(mod - 0) < 0.000001) || (fabsf(mod - div) < 0.000001))
         {
             // Initialize Core Graphics settings
-            UIColor *color = (_rangeValues && _rangeColors) ? [self rangeColorForValue:value] : _scaleDivisionColor;
+            UIColor *color = (_rangeValues && _rangeColors && _useRangeColorForDivisions) ? [self rangeColorForValue:value] : _scaleDivisionColor;
+            UIColor * labelColor = (_rangeValues && _rangeColors && _useRangeColorForScaleLabels) ? [self rangeColorForValue:value] : _scaleLabelColor;
             CGContextSetStrokeColorWithColor(context, color.CGColor);
             CGContextSetLineWidth(context, _scaleDivisionsWidth);
             CGContextSetShadow(context, CGSizeMake(0.05, 0.05), _showScaleShadow ? 2.0 : 0.0);
@@ -282,12 +305,50 @@
             // Draw label
             NSString *valueString = [NSString stringWithFormat:_valueFormat,value];
             UIFont* font = _scaleFont ? _scaleFont : [UIFont fontWithName:@"Helvetica-Bold" size:0.05];
-            NSDictionary* stringAttrs = @{ NSFontAttributeName : font, NSForegroundColorAttributeName : color };
+            NSDictionary* stringAttrs = @{ NSFontAttributeName : font, NSForegroundColorAttributeName : labelColor };
             NSAttributedString* attrStr = [[NSAttributedString alloc] initWithString:valueString attributes:stringAttrs];
-            CGSize fontWidth;
-            fontWidth = [valueString sizeWithAttributes:stringAttrs];
+            CGSize labelSize = [attrStr size];
             
-            [attrStr drawAtPoint:CGPointMake(0.5 - fontWidth.width / 2.0, y3 + 0.005)];
+            if (_horizontalScaleLabels)
+            {
+                CGContextSaveGState(context);
+                
+                const CGPoint textPoint = CGPointMake(0.5, y3 + _scaleLabelsPosition + labelSize.height / 2.0);
+                
+                CGContextTranslateCTM(context, textPoint.x, textPoint.y);
+                
+                const CGFloat angle = [self needleAngleForValue:value];
+                
+                CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(2*M_PI - angle);
+                CGContextConcatCTM(context, rotationTransform);
+                CGContextTranslateCTM(context, -textPoint.x, -textPoint.y);
+                
+                // ARC
+//                CGContextSaveGState(context);
+//                CGContextSetStrokeColorWithColor(context, UIColor.redColor.CGColor);
+//                CGContextAddArc(context, textPoint.x, textPoint.y, 0.002, 0, 2*M_PI, 0);
+//                CGContextStrokePath(context);
+//                CGContextRestoreGState(context);
+                // END ARC
+                
+                [attrStr drawAtPoint:CGPointMake(0.5 - labelSize.width / 2.0, y3 + _scaleLabelsPosition)];
+                if (_showUnitsOnScale)
+                {
+                    NSAttributedString * unitsStr = [[NSAttributedString alloc] initWithString:_unitOfMeasurement attributes:stringAttrs];
+                    [unitsStr drawAtPoint:CGPointMake(0.5 - labelSize.width / 2.0 + labelSize.width, y3 + _scaleLabelsPosition)];
+                }
+                
+                CGContextRestoreGState(context);
+            }
+            else
+            {
+                [attrStr drawAtPoint:CGPointMake(0.5 - labelSize.width / 2.0, y3 + _scaleLabelsPosition)];
+                if (_showUnitsOnScale)
+                {
+                    NSAttributedString * unitsStr = [[NSAttributedString alloc] initWithString:_unitOfMeasurement attributes:stringAttrs];
+                    [unitsStr drawAtPoint:CGPointMake(0.5 + labelSize.width / 2.0, y3 + _scaleLabelsPosition)];
+                }
+            }
         }
         // Subdivision
         else
@@ -773,6 +834,7 @@
     [self invalidateBackground];
 }
 
+
 - (void)setUnitOfMeasurementColor:(UIColor *)unitOfMeasurementColor
 {
     _unitOfMeasurementColor = unitOfMeasurementColor;
@@ -791,4 +853,45 @@
     [self invalidateNeedle];
 }
 
+- (void)setScaleLabelColor:(UIColor *)scaleLabelColor
+{
+    _scaleLabelColor = scaleLabelColor;
+    [self invalidateBackground];
+}
+
+- (void)setUseRangeColorForDivisions:(bool)useRangeColorForDivisions
+{
+    _useRangeColorForDivisions = useRangeColorForDivisions;
+    [self invalidateBackground];
+}
+
+- (void)setUseRangeColorForScaleLabels:(bool)useRangeColorForScaleLabels
+{
+    _useRangeColorForScaleLabels = useRangeColorForScaleLabels;
+    [self invalidateBackground];
+}
+
+- (void)setScaleLabelsPosition:(CGFloat)scaleLabelsPosition
+{
+    _scaleLabelsPosition = scaleLabelsPosition;
+    [self invalidateBackground];
+}
+
+- (void)setHorizontalScaleLabels:(bool)horizontalScaleLabels
+{
+    _horizontalScaleLabels = horizontalScaleLabels;
+    [self invalidateBackground];
+}
+
+- (void)setShowUnitsOnScale:(bool)showUnitsOnScale
+{
+    _showUnitsOnScale = showUnitsOnScale;
+    [self invalidateBackground];
+}
+
+- (void)setCustomText:(NSAttributedString *)customText
+{
+    _customText = customText;
+    [self invalidateBackground];
+}
 @end

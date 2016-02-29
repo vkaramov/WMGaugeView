@@ -16,7 +16,6 @@
 #define kCenterY            0.5
 
 #define kNeedleColor        UIColor.darkGrayColor.CGColor
-#define kNeedleScrewColor   CGRGB(68, 84, 105)
 
 @interface WMGaugeViewStyleThermostat ()
 

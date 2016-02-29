@@ -43,33 +43,37 @@
     _gaugeView2.minValue = 50;
     _gaugeView2.maxValue = 90.0;
     _gaugeView2.showInnerRim = YES;
-    _gaugeView2.innerRimWidth = 0.1;
+    _gaugeView2.innerRimWidth = 0.11;
     _gaugeView2.showRangeLabels = YES;
     _gaugeView2.rangeLabelsWidth = 0.049;
     _gaugeView2.scalePosition = -0.07;
-//    _gaugeView2.scaleLabelsPosition = -0.11;
+    _gaugeView2.scaleLabelsPosition = -0.11;
+    _gaugeView2.showScaleShadow = NO;
     _gaugeView2.scaleDivisionColor = RGB(235, 235, 235);
     _gaugeView2.rangeLabelsFontColor = RGB(109, 95, 95);
-//    _gaugeView2.useRangeColorForDivisions = NO;
+    _gaugeView2.scaleLabelColor = UIColor.darkGrayColor;
+    _gaugeView2.useRangeColorForDivisions = NO;
+    _gaugeView2.useRangeColorForScaleLabels = NO;
+    _gaugeView2.horizontalScaleLabels = YES;
     _gaugeView2.scaleDivisions = 4;
     _gaugeView2.scaleSubdivisions = 5;
     _gaugeView2.scaleStartAngle = 30;
     _gaugeView2.scaleEndAngle = 330;
     _gaugeView2.showScaleShadow = NO;
+    _gaugeView2.showUnitsOnScale = YES;
     _gaugeView2.scaleFont = [UIFont fontWithName:@"Helvetica-bold" size:0.065];
     _gaugeView2.scalesubdivisionsAligment = WMGaugeViewSubdivisionsAlignmentCenter;
-    _gaugeView2.scaleSubdivisionsWidth = 0;//0.002;
-    _gaugeView2.scaleSubdivisionsLength = 0;//0.04;
+    _gaugeView2.scaleSubdivisionsWidth = 0;
+    _gaugeView2.scaleSubdivisionsLength = 0;
     _gaugeView2.scaleDivisionsWidth = 0.007;
     _gaugeView2.scaleDivisionsLength = 0.03;
     _gaugeView2.value = 60;
-//    _gaugeView2.valueFormat = @"%0.0fº";
     UIColor * customTextColor = RGB(109, 95, 95);
     UIFont * customTextFont = [UIFont fontWithName:@"Helvetica" size:0.2];
-//    NSDictionary* stringAttrs = @{ NSFontAttributeName : customTextFont, NSForegroundColorAttributeName : customTextColor };
-//    NSAttributedString* customText = [[NSAttributedString alloc] initWithString:@"64" attributes:stringAttrs];
-//    _gaugeView2.customTextVerticalOffset = 0.35;
-//    _gaugeView2.customText = customText;
+    NSDictionary* stringAttrs = @{ NSFontAttributeName : customTextFont, NSForegroundColorAttributeName : customTextColor };
+    NSAttributedString* customText = [[NSAttributedString alloc] initWithString:@"64" attributes:stringAttrs];
+    _gaugeView2.customTextVerticalOffset = 0.35;
+    _gaugeView2.customText = customText;
     _gaugeView2.unitOfMeasurementVerticalOffset = 0.35;
     _gaugeView2.showUnitOfMeasurement = YES;
     _gaugeView2.unitOfMeasurement = @"º";
@@ -89,6 +93,17 @@
 //                                    repeats:YES];
 }
 
+- (NSAttributedString *) makeCustomTextForValue:(float)value
+{
+    UIColor * customTextColor = RGB(109, 95, 95);
+    UIFont * customTextFont = [UIFont fontWithName:@"Helvetica" size:0.2];
+    NSDictionary* stringAttrs = @{ NSFontAttributeName : customTextFont, NSForegroundColorAttributeName : customTextColor };
+    NSString * str = [NSString stringWithFormat:@"%.0f", value];
+    NSAttributedString* customText = [[NSAttributedString alloc] initWithString:str attributes:stringAttrs];
+    
+    return customText;
+}
+
 -(void)gaugeUpdateTimer:(NSTimer *)timer
 {
     _gaugeView.value = rand()%(int)_gaugeView.maxValue;
@@ -96,7 +111,7 @@
     
     __weak typeof(self) weakSelf = self;
     [_gaugeView2 setValue:value animated:YES duration:0.5 completion:^(BOOL finished) {
-        weakSelf.gaugeView2.unitOfMeasurement = [NSString stringWithFormat:@"%.0fº", value];
+        weakSelf.gaugeView2.customText = [weakSelf makeCustomTextForValue:value];
     }];
 }
 
