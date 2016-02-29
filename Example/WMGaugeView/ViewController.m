@@ -56,7 +56,7 @@
     _gaugeView2.useRangeColorForDivisions = NO;
     _gaugeView2.useRangeColorForScaleLabels = NO;
     _gaugeView2.horizontalScaleLabels = YES;
-    _gaugeView2.scaleDivisions = 4;
+    _gaugeView2.scaleDivisions = 8;
     _gaugeView2.scaleSubdivisions = 5;
     _gaugeView2.scaleStartAngle = 30;
     _gaugeView2.scaleEndAngle = 330;
