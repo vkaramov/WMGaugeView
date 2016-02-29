@@ -22,6 +22,18 @@ typedef enum
 }
 WMGaugeViewSubdivisionsAlignment;
 
+@interface WMGaugeRange : NSObject
+@property (nonatomic, readwrite, assign) float start;
+@property (nonatomic, readwrite, assign) float end;
+@property (nonatomic, readwrite, strong) UIColor *color;
+@property (nonatomic, readwrite, assign) bool show;
+
+- (instancetype)initWithStart:(float)start
+                          end:(float)end
+                        color:(UIColor *)color
+                         show:(bool)show;
+@end;
+
 /**
  * WMGaugeView class
  */
@@ -65,6 +77,7 @@ WMGaugeViewSubdivisionsAlignment;
 @property (nonatomic, readwrite, assign) bool showTopMarker2;
 @property (nonatomic, readwrite, strong) UIColor * topMarker1Color;
 @property (nonatomic, readwrite, strong) UIColor * topMarker2Color;
+@property (nonatomic, readwrite, strong) NSArray<WMGaugeRange *> * topRanges;
 @property (nonatomic, readwrite, assign) bool showRangeLabels;
 @property (nonatomic, readwrite, assign) CGFloat rangeLabelsWidth;
 @property (nonatomic, readwrite, strong) UIFont *rangeLabelsFont;

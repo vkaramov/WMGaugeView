@@ -10,6 +10,21 @@
 /* Scale conversion macro from [0-1] range to view  real size range */
 #define FULL_SCALE(x,y)    (x)*self.bounds.size.width, (y)*self.bounds.size.height
 
+@implementation WMGaugeRange
+-(instancetype)initWithStart:(float)start end:(float)end color:(UIColor *)color show:(bool)show
+{
+    self = [super init];
+    if (self)
+    {
+        _start = start;
+        _end = end;
+        _color = color;
+        _show = show;
+    }
+    return self;
+}
+@end
+
 @implementation WMGaugeView
 {
     /* Drawing rects */
@@ -251,6 +266,8 @@
 
     if (_showRangeLabels)
         [self drawRangeLabels:context];
+    
+    [self drawTopRanges:context];
 }
 
 /**
@@ -417,14 +434,14 @@
     [self rotateContext:context fromCenter:center withAngle:DEGREES_TO_RADIANS(90 + _scaleStartAngle)];
     CGContextSetShadow(context, CGSizeMake(0.0, 0.0), 0.0);
     
-    CGFloat maxAngle = _scaleEndAngle - _scaleStartAngle;
+    const CGFloat maxAngle = _scaleEndAngle - _scaleStartAngle;
     CGFloat lastStartAngle = 0.0f;
 
-    for (int i = 0; i < _rangeValues.count; i ++)
+    for (int i = 0; i < _rangeValues.count; ++i)
     {
         // Range value
-        float value = ((NSNumber*)[_rangeValues objectAtIndex:i]).floatValue;
-        float valueAngle = (value - _minValue) / (_maxValue - _minValue) * maxAngle;
+        const float value = ((NSNumber*)[_rangeValues objectAtIndex:i]).floatValue;
+        const float valueAngle = (value - _minValue) / (_maxValue - _minValue) * maxAngle;
         
         // Range curved shape
         UIBezierPath *path = [UIBezierPath bezierPath];
@@ -441,6 +458,31 @@
         lastStartAngle = valueAngle;
     }
     
+    CGContextRestoreGState(context);
+}
+
+- (void)drawTopRanges:(CGContextRef)context
+{
+    CGContextSaveGState(context);
+    [self rotateContext:context fromCenter:center withAngle:DEGREES_TO_RADIANS(90 + _scaleStartAngle)];
+    CGContextSetShadow(context, CGSizeMake(0.0, 0.0), 0.0);
+    
+    const CGFloat maxAngle = _scaleEndAngle - _scaleStartAngle;
+    
+    for (WMGaugeRange * range in _topRanges)
+    {
+        const float startAngle = (range.start - _minValue) / (_maxValue - _minValue) * maxAngle;
+        const float endAngle = (range.end - _minValue) / (_maxValue - _minValue) * maxAngle;
+        
+        // Range curved shape
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path addArcWithCenter:center radius:(scaleRect.size.width - _scaleDivisionsLength)/ 2.0 startAngle:DEGREES_TO_RADIANS(startAngle) endAngle:DEGREES_TO_RADIANS(endAngle) clockwise:YES];
+        
+        [range.color setStroke];
+        path.lineWidth = _scaleDivisionsLength;
+        [path stroke];
+        
+    }
     CGContextRestoreGState(context);
 }
 
