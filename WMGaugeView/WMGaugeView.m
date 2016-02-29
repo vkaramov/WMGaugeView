@@ -34,6 +34,12 @@
     
     /* Needle layer */
     CALayer *rootNeedleLayer;
+    
+    /**
+     *  Top Marker layers
+     */
+    CALayer *topMarkerLayer1;
+    CALayer *topMarkerLayer2;
 
     /* Annimation completion */
     void (^animationCompletion)(BOOL);
@@ -91,6 +97,13 @@
     _minValue = 0.0;
     _maxValue = 240.0;
     _valueFormat = @"%0.0f";
+    
+    _topMarker1Value = 0.0;
+    _topMarker2Value = 0.0;
+    _topMarker1Color = [UIColor whiteColor];
+    _topMarker2Color = [UIColor whiteColor];
+    _showTopMarker1 = false;
+    _showTopMarker2 = false;
 
     background = nil;
     
@@ -194,7 +207,30 @@
         
         // Set needle current value
         [self setValue:_value animated:NO];
-    }    
+    }
+
+    // Draw Top Markers
+    if (!topMarkerLayer1)
+    {
+        topMarkerLayer1 = [CALayer new];
+        topMarkerLayer1.frame = self.bounds;
+        [self.layer addSublayer:topMarkerLayer1];
+        
+        [self drawTopMarkerAtLayer:topMarkerLayer1 withColor:_topMarker1Color inRect:self.bounds];
+        
+        [self setTopMarker1Value:_topMarker1Value];
+    }
+    
+    if (!topMarkerLayer2)
+    {
+        topMarkerLayer2 = [CALayer new];
+        topMarkerLayer2.frame = self.bounds;
+        [self.layer addSublayer:topMarkerLayer2];
+        
+        [self drawTopMarkerAtLayer:topMarkerLayer2 withColor:_topMarker2Color inRect:self.bounds];
+        
+        [self setTopMarker2Value:_topMarker2Value];
+    }
 }
 
 /**
@@ -416,6 +452,27 @@
     if ([_style conformsToProtocol:@protocol(WMGaugeViewStyle)]) {
         [_style drawNeedleOnLayer:rootNeedleLayer inRect:self.bounds];
     }
+}
+
+- (void)drawTopMarkerAtLayer:(CALayer *)layer withColor:(UIColor *)color inRect:(CGRect)rect
+{
+    const CGFloat kNeedleWidth = 0.014;
+    const CGFloat kNeedleHeight = 0.03;
+    
+    CAShapeLayer * needleLayer = [CAShapeLayer layer];
+    UIBezierPath *needlePath = [UIBezierPath bezierPath];
+    [needlePath moveToPoint:CGPointMake(FULLSCALE(center.x - kNeedleWidth, scaleRect.origin.y))];
+    [needlePath addLineToPoint:CGPointMake(FULLSCALE(center.x + kNeedleWidth, scaleRect.origin.y))];
+    [needlePath addLineToPoint:CGPointMake(FULLSCALE(center.x, scaleRect.origin.y + kNeedleHeight))];
+    [needlePath closePath];
+    
+    needleLayer.path = needlePath.CGPath;
+    needleLayer.backgroundColor = [[UIColor clearColor] CGColor];
+    needleLayer.fillColor = color.CGColor;
+    needleLayer.strokeColor = color.CGColor;
+    needleLayer.lineWidth = 1.5;
+    
+    [layer addSublayer:needleLayer];
 }
 
 #pragma mark - Tools
@@ -893,5 +950,17 @@
 {
     _customText = customText;
     [self invalidateBackground];
+}
+
+- (void)setTopMarker1Value:(float)topMarker1Value
+{
+    _topMarker1Value = topMarker1Value;
+    topMarkerLayer1.transform = CATransform3DMakeRotation([self needleAngleForValue:_topMarker1Value] , 0, 0, 1.0);
+}
+
+-(void)setTopMarker2Value:(float)topMarker2Value
+{
+    _topMarker2Value = topMarker2Value;
+    topMarkerLayer2.transform = CATransform3DMakeRotation([self needleAngleForValue:_topMarker2Value] , 0, 0, 1.0);
 }
 @end

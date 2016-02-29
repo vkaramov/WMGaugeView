@@ -82,8 +82,12 @@
     const CGFloat lastRangeValue = [self valueForAngle:390 forGauge:_gaugeView2];
     _gaugeView2.rangeValues = @[ @65,                 @75,                @90,               @(lastRangeValue)              ];
     _gaugeView2.rangeColors = @[ RGB(223, 33, 47),    RGB(217, 215, 213),  RGB(36,146,210),   RGB(238,238,238)    ];
-    
-    
+    _gaugeView2.topMarker1Color = RGB(223, 33, 47);
+    _gaugeView2.topMarker2Color = RGB(36, 146, 210);
+    _gaugeView2.showTopMarker1 = YES;
+    _gaugeView2.showTopMarker2 = YES;
+    _gaugeView2.topMarker1Value = 65;
+    _gaugeView2.topMarker2Value = 75;
     
     
 //    [NSTimer scheduledTimerWithTimeInterval:2.0
