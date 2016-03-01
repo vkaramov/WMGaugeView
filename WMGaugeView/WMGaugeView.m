@@ -313,7 +313,7 @@
     
     if (_customText2.length)
     {
-        [_customText2 drawAtPoint:CGPointMake(0.5 - fontWidth.width / 2.0, _customText2VerticalOffset)];
+        [_customText2 drawAtPoint:CGPointMake(0.5 - _customText2.size.width / 2.0, _customText2VerticalOffset)];
     }
 }
 
