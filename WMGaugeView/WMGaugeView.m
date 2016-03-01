@@ -471,6 +471,10 @@
     
     for (WMGaugeRange * range in _topRanges)
     {
+        if (!range.show)
+        {
+            continue;
+        }
         const float startAngle = (range.start - _minValue) / (_maxValue - _minValue) * maxAngle;
         const float endAngle = (range.end - _minValue) / (_maxValue - _minValue) * maxAngle;
         

@@ -9,9 +9,6 @@
 #import "ViewController.h"
 #import "WMGaugeView.h"
 
-#define RGB(r,g,b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0]
-#define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
-
 @interface ViewController ()
 
 @property (strong, nonatomic) IBOutlet WMGaugeView *gaugeView;
@@ -51,7 +48,7 @@
     _gaugeView2.scaleLabelsPosition = -0.11;
     _gaugeView2.showScaleShadow = NO;
     _gaugeView2.scaleDivisionColor = RGB(235, 235, 235);
-    _gaugeView2.rangeLabelsFontColor = RGB(109, 95, 95);
+//    _gaugeView2.rangeLabelsFontColor = RGB(109, 95, 95);
     _gaugeView2.scaleLabelColor = UIColor.darkGrayColor;
     _gaugeView2.useRangeColorForDivisions = NO;
     _gaugeView2.useRangeColorForScaleLabels = NO;
@@ -102,8 +99,8 @@
     _gaugeView2.topMarker1Value = 65;
     _gaugeView2.topMarker2Value = 75;
     
-    WMGaugeRange * range1 = [[WMGaugeRange alloc] initWithStart:62 end:66 color:RGBA(237,237,237, 0.3) show:YES];
-    WMGaugeRange * range2 = [[WMGaugeRange alloc] initWithStart:68 end:76 color:RGBA(237,237,237, 0.3) show:YES];
+    WMGaugeRange * range1 = [[WMGaugeRange alloc] initWithStart:62 end:66 color:RGBA(237,237,237, 76) show:NO];
+    WMGaugeRange * range2 = [[WMGaugeRange alloc] initWithStart:68 end:76 color:RGBA(237,237,237, 76) show:YES];
     
     _gaugeView2.topRanges = @[range1, range2];
     
